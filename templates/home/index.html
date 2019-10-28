@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Welcome Artivatic AI Task</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+
+<style type="text/css">
+    .swal-footer {
+		margin: 0 auto;
+		width: 17%;
+	}
+
+    .home {
+        padding: 20px;
+        border: 0.5px solid;
+        margin-top: 20px;
+    }
+</style>
+
+<body class="container home">
+    <h1>Welcome To Artivatic AI Mail Sending Platform</h1>
+    <hr>
+    <h3>Send single email</h3>
+    <br>
+    <form name="single_email">
+        <div class="form-row">
+            <div class="col">
+                <label for="inputEmail" class="sr-only">Enter Email</label>
+                <input type="email" class="form-control" id="inputEmail" placeholder="Enter email" required>
+            </div>
+            <div class="col">
+                <label for="bccinputEmail" class="sr-only">Enter Email</label>
+                <input type="email" class="form-control" id="bccinputEmail" placeholder="Enter bcc email">
+            </div>
+            <div class="col">
+                <label for="ccinputEmail" class="sr-only">Enter Email</label>
+                <input type="email" class="form-control" id="ccinputEmail" placeholder="Enter cc email">
+            </div>
+            <div class="col">
+                <button type="button" class="btn btn-primary mb-4 send_email">Send email</button>
+            </div>
+        </div>
+    </form>
+    <hr>
+
+    <h3>Upload Multiple email CSV</h3>
+    <br>
+    <div class="custom-file">
+        <input type="file" class="custom-file-input file_uploader" id="customFile" accept=".csv">
+        <label class="custom-file-label" for="customFile">Choose file</label>
+    </div>
+</body>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
+
+<script type="text/javascript">
+    var send_email_func = {
+        upload: function(url,data,successCallback,errorCallback){
+			$.ajax({
+				url: url,
+				headers: {"X-CSRFToken": $('[name=csrfmiddlewaretoken]').val()},
+				data: data,
+				contentType: false,
+				processData: false,
+				method: "POST",
+			    success: successCallback,
+			    error: errorCallback
+			});
+		},
+        send_email: function(url,data,successCallback,errorCallback){
+			$.ajax({
+				url: url,
+				headers: {"X-CSRFToken": $('[name=csrfmiddlewaretoken]').val()},
+				data: JSON.stringify(data),
+				contentType: 'application/json; charset=utf-8',
+				processData: false,
+				method: 'POST',
+                dataType: 'json',
+                async: false,
+			    success: successCallback,
+			    error: errorCallback,
+			});
+		}
+    };
+
+    $(".file_uploader").on('change', function (event){
+        var data = new FormData();
+        data.append("file", $('#customFile')[0].files[0]);
+        var url = '/api/v1/bulk/send_email';
+        send_email_func.upload(url, data,
+            function(data){
+                swal('Successfully Uploaded.', '', 'success');
+            }, function(data){
+                swal(data.responseJSON['status'], data.responseJSON['details'].join(', '), "error");
+            }
+        );
+    });
+
+    $(".send_email").click(function (event){
+        event.preventDefault();
+        if ($('#inputEmail').val() == '') {
+            swal('Email field should not be blank.', '', 'error');
+            return
+        }
+
+        // if (ValidateEmail($('#inputEmail').val())) {
+        data = {
+            'email': $('#inputEmail').val(),
+            'bcc_email': $('#bccinputEmail').val(),
+            'cc_email': $('#ccinputEmail').val()
+        }
+        var url = '/api/v1/send_email';
+        send_email_func.send_email(url, data,
+            function(data){
+                $('#inputEmail').val('');
+                $('#bccinputEmail').val('');
+                $('#ccinputEmail').val('');
+                swal('Successfully Uploaded.', '', 'success');
+            }, function(data){
+                swal(data.responseJSON['status'], data.responseJSON['details'].join(', '), "error");
+            }
+        );
+        // }
+    });
+
+    function ValidateEmail(inputText) {
+        var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        if(inputText.match(mailformat)) {
+            return true;
+        } else {
+            swal('Please enter a valid email.', '', 'error');
+            $('#inputEmail').focus();
+            return 
+        }        
+    }
+</script>
+
+</html>
