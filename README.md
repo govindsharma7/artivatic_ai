@@ -10,9 +10,10 @@ Using Pipenv run step to setup:
 Install Pipenv: `brew install pipenv`
 
 Setup App:
+
 Copy env file: `cp env\local.txt .env`
-To activate virtual env: `pipenv shell`
-To Install requirement: `pipenv install -d`
+<br>To activate virtual env: `pipenv shell`
+<br>To Install requirement: `pipenv install -d`
 
 If not using Pipenv:-
 Install Requirement: `pip install -r requirements.txt`
@@ -23,5 +24,5 @@ Than Run LogStash:
 Run ELK:
 
 Elasticsearch: `http://localhost:9200`
-Logstash: `http://localhost:9600`
-Kibana: `http://localhost:5601`
+<br>Logstash: `http://localhost:9600`
+<br>Kibana: `http://localhost:5601`
