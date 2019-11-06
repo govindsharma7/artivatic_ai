@@ -66,12 +66,14 @@ def statistics():
     }'
     '''
     uri = 'http://localhost:9200/_search'
+    date = str(datetime.now().date())
+    date_time = date + ' 00:00:00'
     query = {
         "query": {
             "range" : {
                 "timestamp" : {
-                    "time_zone": "+01:00", 
-                    "gte": "2019-11-01 00:00:00", 
+                    "time_zone": "+05:30", 
+                    "gte": date_time, 
                     "lte": "now" 
                 }
             }
