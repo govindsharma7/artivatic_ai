@@ -92,8 +92,7 @@ def send_mail_fuc(data):
 
     for each in email_data:
         try:
-            user_email = UserEmail.objects.get(email=each)
-            user_email.update()
+            UserEmail.objects.get(email=each)
         except UserEmail.DoesNotExist:
             UserEmail.objects.create(email=each)
 

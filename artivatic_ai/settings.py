@@ -121,13 +121,23 @@ LOGGING = {
         },
     },
     'handlers': {
+        # 'logstash': {
+        #     'level': 'INFO',
+        #     'class': 'logstash.TCPLogstashHandler',
+        #     'host': 'localhost',
+        #     'port': 5959, # Default value: 5959
+        #     'version': 1, # Version of logstash event schema. Default value: 0 (for backward compatibility of the library)
+        #     'message_type': 'django',  # 'type' field in logstash message. Default value: 'logstash'.
+        #     'fqdn': False, # Fully qualified domain name. Default value: false.
+        #     'tags': ['django.request'], # list of tags. Default: None.
+        # },
         'console': {
             'level': 'INFO',
             'class': 'logging.StreamHandler',
             'formatter': 'simple'
         },
         'logstash': {
-            'level': 'WARNING',
+            'level': 'INFO',
             'class': 'logstash.TCPLogstashHandler',
             'host': 'localhost',
             'port': 5959, # Default value: 5959
@@ -140,7 +150,7 @@ LOGGING = {
     'loggers': {
         'django.request': {
             'handlers': ['logstash'],
-            'level': 'WARNING',
+            'level': 'INFO',
             'propagate': True,
         },
         'django': {
