@@ -131,11 +131,11 @@ LOGGING = {
         #     'fqdn': False, # Fully qualified domain name. Default value: false.
         #     'tags': ['django.request'], # list of tags. Default: None.
         # },
-        'console': {
-            'level': 'INFO',
-            'class': 'logging.StreamHandler',
-            'formatter': 'simple'
-        },
+        # 'console': {
+        #     'level': 'WARNING',
+        #     'class': 'logging.StreamHandler',
+        #     'formatter': 'simple'
+        # },
         'logstash': {
             'level': 'INFO',
             'class': 'logstash.TCPLogstashHandler',
@@ -153,10 +153,10 @@ LOGGING = {
             'level': 'INFO',
             'propagate': True,
         },
-        'django': {
-            'handlers': ['console'],
-            'propagate': True,
-        },
+        # 'django': {
+        #     'handlers': ['console'],
+        #     'propagate': True,
+        # },
     }
 }
 

@@ -1,5 +1,6 @@
 import logging
 import urllib
+import requests
 
 from celery.decorators import task, periodic_task
 from celery.task.schedules import crontab
@@ -48,7 +49,7 @@ def send_email_content_type(email_subject, message, user_email, bcc_email, cc_em
     return result
 
 
-@periodic_task(run_every=(crontab(minute='*/30')), name="statistics", ignore_result=True)
+@periodic_task(run_every=(crontab(minute='*/1')), name="statistics", ignore_result=True)
 def statistics():
     '''
     Curl Request:
@@ -79,7 +80,7 @@ def statistics():
             }
         }
     }
-    resp = requests.get(uri, data=query, headers='content-type:application/json')
+    resp = requests.get(uri, data=query, headers={'content-type':'application/json'})
     try:
         resp_text = json.loads(resp.text)
     except:
